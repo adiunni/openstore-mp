@@ -8,6 +8,7 @@ import Web3Modal from "web3modal";
 import Script from "next/script";
 import Head from "next/head";
 import Footer from "../components/Footer";
+import Toast from "../components/Toast";
 
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
@@ -24,6 +25,7 @@ export default function CreateItem() {
     description: "",
   });
   const router = useRouter();
+  const [openToast, setOpenToast] = useState(false);
 
   async function onChange(e) {
     const file = e.target.files[0];
@@ -90,7 +92,9 @@ export default function CreateItem() {
         }
       );
       await transaction.wait();
-      router.push("/");
+      window.scrollTo(0, 0);
+      setOpenToast(true);
+      setTimeout(() => router.push("/"), 2000);
     } catch (error) {
       console.log(error);
     }
@@ -106,15 +110,21 @@ export default function CreateItem() {
   };
 
   return (
-    <div>
+    <>
       <Script src="https://kit.fontawesome.com/a076d05399.js" />
       <Head>
         <title>Create Asset</title>
       </Head>
-
+      {openToast ? (
+        <Toast
+          headerMessage={"Item created"}
+          message={"Find your product on home"}
+          setOpenToast={setOpenToast}
+          openToast={openToast}
+        />
+      ) : null}
       <main>
         <h1 className="text-center my-5 header display-4">Create Asset</h1>
-
         <div style={{ marginBottom: "50px" }} className="container ">
           <div className="row ">
             <div
@@ -212,6 +222,6 @@ export default function CreateItem() {
           </div>
         </div>
       </main>
-    </div>
+    </>
   );
 }
