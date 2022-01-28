@@ -24,4 +24,20 @@ contract NFT is ERC721URIStorage {
 
         return newTokenId;
     }
+
+    function transferToken(
+        address from,
+        address to,
+        uint256 tokenId
+    ) external {
+        require(
+            ownerOf(tokenId) == msg.sender,
+            "You are not the owner of this token"
+        );
+        _transfer(from, to, tokenId);
+    }
+
+    function getContractAddress() public view returns (address) {
+        return contractAddress;
+    }
 }
