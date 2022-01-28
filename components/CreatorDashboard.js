@@ -7,6 +7,8 @@ import NFTMarket from "../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ItemList = () => {
   const [items, setItems] = useState([]);
@@ -18,41 +20,39 @@ const ItemList = () => {
   }, []);
 
   const getItems = async () => {
-    const web3Modal = new Web3Modal(projAddress);
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-
-    const marketContract = new ethers.Contract(
-      nftmarketaddress,
-      NFTMarket.abi,
-      signer
-    );
-    const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider);
-    const data = await marketContract.fetchCreateNFTs();
-
-    console.log(data);
-
-    let newItems = await Promise.all(
-      data.map(async (d) => {
-        const tokenUri = await tokenContract.tokenURI(d.tokenId);
-        const meta = await axios.get(tokenUri);
-        const price = ethers.utils.formatUnits(d.price.toString(), "ether");
-
-        return {
-          price,
-          tokenId: d.tokenId.toNumber(),
-          seller: d.seller,
-          owner: d.owner,
-          image: meta.data.image,
-          name: meta.data.name,
-          description: meta.data.description,
-        };
-      })
-    );
-    console.log(newItems);
-
-    setItems(newItems);
+    try {
+      const web3Modal = new Web3Modal(projAddress);
+      const connection = await web3Modal.connect();
+      const provider = new ethers.providers.Web3Provider(connection);
+      const signer = provider.getSigner();
+      const marketContract = new ethers.Contract(
+        nftmarketaddress,
+        NFTMarket.abi,
+        signer
+      );
+      const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider);
+      const data = await marketContract.fetchCreateNFTs();
+      let newItems = await Promise.all(
+        data.map(async (d) => {
+          const tokenUri = await tokenContract.tokenURI(d.tokenId);
+          const meta = await axios.get(tokenUri);
+          const price = ethers.utils.formatUnits(d.price.toString(), "ether");
+          return {
+            price,
+            tokenId: d.tokenId.toNumber(),
+            seller: d.seller,
+            owner: d.owner,
+            image: meta.data.image,
+            name: meta.data.name,
+            description: meta.data.description,
+          };
+        })
+      );
+      setItems(newItems);
+      toast.success("Items fetched successfully!");
+    } catch (error) {
+      toast.error("Failed to get your items!");
+    }
   };
 
   return (
@@ -63,8 +63,12 @@ const ItemList = () => {
         flexWrap: "wrap",
       }}
     >
-      {items.length &&
-        items.map((item, key) => <UserCard key={key} data={item} />)}
+      <ToastContainer autoClose={2000} />
+      {items.length ? (
+        items.map((item, key) => <UserCard key={key} data={item} />)
+      ) : (
+        <p style={{ fontSize: "14pt" }}> No items </p>
+      )}
     </div>
   );
 };

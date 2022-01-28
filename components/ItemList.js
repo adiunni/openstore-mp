@@ -7,6 +7,8 @@ import NFTMarket from "../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ItemList = () => {
   const [items, setItems] = useState([]);
@@ -34,16 +36,19 @@ const ItemList = () => {
       );
       let data;
       if (category == "All") {
-        data = await marketContract.getMarketItems();
+        data = await marketContract
+          .getMarketItems()
+          .catch((err) => toast.error("Failed to get market items!"));
       } else {
-        data = await marketContract.getItemsByCategory(category);
+        data = await marketContract
+          .getItemsByCategory(category)
+          .catch((error) => toast.error("Failed to get categorized items!"));
       }
       let newItems = await Promise.all(
         data.map(async (d) => {
           const tokenUri = await tokenContract.tokenURI(d.tokenId);
           const meta = await axios.get(tokenUri);
           const price = ethers.utils.formatUnits(d.price.toString(), "ether");
-
           return {
             price,
             tokenId: d.tokenId.toNumber(),
@@ -58,17 +63,24 @@ const ItemList = () => {
         console.log(err);
       });
       setItems(newItems);
+      toast.success("Items fetched successfully!");
     } catch (error) {
       console.log(error);
+      toast.error("Failed to fetch items");
     }
   };
+
+  async function wait(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }
 
   const buyNft = async (nft) => {
     try {
       const web3Modal = new Web3Modal(projAddress);
       const connection = await web3Modal.connect();
       const prov = new ethers.providers.Web3Provider(connection);
-
       const signer = prov.getSigner();
       const contract = new ethers.Contract(
         nftmarketaddress,
@@ -77,16 +89,18 @@ const ItemList = () => {
       );
 
       const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
-      const transaction = await contract.createMarketSale(
-        nftaddress,
-        nft.tokenId,
-        {
+      toast("Opening wallet...");
+      await wait(1000);
+      const transaction = await contract
+        .createMarketSale(nftaddress, nft.tokenId, {
           value: price.toString(),
-        }
-      );
-      console.log(transaction);
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Error creating transaction");
+        });
       const tx = await transaction.wait();
-      console.log(tx);
+      toast.success("Successfully purchased item!");
       getItems("All");
     } catch (error) {
       console.log(error);
@@ -101,6 +115,7 @@ const ItemList = () => {
         gap: "20px",
       }}
     >
+      <ToastContainer autoClose="2000" />
       <div style={{ width: "200px" }}>
         <label htmlFor="category">Category:</label>{" "}
         <select
