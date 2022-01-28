@@ -7,6 +7,8 @@ import NFTMarket from "../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ItemList = () => {
   const [items, setItems] = useState([]);
@@ -23,7 +25,6 @@ const ItemList = () => {
       const connection = await web3Modal.connect();
       const provider = new ethers.providers.Web3Provider(connection);
       const signer = provider.getSigner();
-
       const marketContract = new ethers.Contract(
         nftmarketaddress,
         NFTMarket.abi,
@@ -32,14 +33,11 @@ const ItemList = () => {
       const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider);
       const data = await marketContract.fetchPurchasedNFTs();
 
-      console.log(data);
-
       let newItems = await Promise.all(
         data.map(async (d) => {
           const tokenUri = await tokenContract.tokenURI(d.tokenId);
           const meta = await axios.get(tokenUri);
           const price = ethers.utils.formatUnits(d.price.toString(), "ether");
-
           return {
             price,
             tokenId: d.tokenId.toNumber(),
@@ -51,11 +49,11 @@ const ItemList = () => {
           };
         })
       );
-      console.log(newItems);
-
       setItems(newItems);
+      toast.success("Items fetched successfully!");
     } catch (e) {
       console.log(e);
+      toast.error("Error fetching items!");
     }
   };
 
@@ -67,8 +65,12 @@ const ItemList = () => {
         flexWrap: "wrap",
       }}
     >
-      {items.length &&
-        items.map((item, key) => <UserCard key={key} data={item} />)}
+      <ToastContainer autoClose={3000} />
+      {items.length ? (
+        items.map((item, key) => <UserCard key={key} data={item} />)
+      ) : (
+        <p style={{ fontSize: "26pt" }}>You do not have any assets for now</p>
+      )}
     </div>
   );
 };

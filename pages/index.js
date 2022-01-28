@@ -3,8 +3,6 @@ import Head from "next/head";
 import Display from "../components/Display";
 import TopWaveFooter from "../components/TopWaveFooter";
 import ItemList from "../components/ItemList";
-import WaveFooter from "../components/WaveFooter";
-import Footer from "../components/Footer";
 
 export default function Home() {
   return (

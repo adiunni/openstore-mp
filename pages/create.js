@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ethers } from "ethers";
 import { create as ipfsHttpClient } from "ipfs-http-client";
-import WaveFooter from "../components/WaveFooter";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Web3Modal from "web3modal";
 import Script from "next/script";
 import Head from "next/head";
-import Footer from "../components/Footer";
-import Toast from "../components/Toast";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
@@ -25,8 +24,22 @@ export default function CreateItem() {
     description: "",
   });
   const router = useRouter();
-  const [openToast, setOpenToast] = useState(false);
-
+  const success = () =>
+    toast.success("Created NFT!", {
+      postition: "top-right",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+    });
+  const error = () =>
+    toast.error("Error creating NFT!", {
+      postition: "top-right",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+    });
   async function onChange(e) {
     const file = e.target.files[0];
     try {
@@ -35,13 +48,33 @@ export default function CreateItem() {
       });
       const fileUrl = `https://ipfs.infura.io/ipfs/${added.path}`;
       setValues({ ...values, fileUrl });
+      toast.success("File uploaded to IPFS!");
     } catch (error) {
       console.log("Error uploading file: ", error);
     }
   }
   async function createMarket() {
     const { name, description, price, fileUrl, category } = values;
-    if (!name || !description || !price || !fileUrl || !category) return;
+    if (!name) {
+      toast.warn("Please enter a name!");
+      return;
+    }
+    if (!description) {
+      toast.warn("Please enter a description!");
+      return;
+    }
+    if (!price || price <= 0) {
+      toast.warn("Price cannot be 0 or less!");
+      return;
+    }
+    if (!category) {
+      toast.warn("Enter a category!");
+      return;
+    }
+    if (!fileUrl) {
+      toast.warn("Please upload an image!");
+      return;
+    }
     /* first, upload to IPFS */
     const data = JSON.stringify({
       name,
@@ -55,7 +88,12 @@ export default function CreateItem() {
       createSale(url);
     } catch (error) {
       console.log("Error uploading file: ", error);
+      toast.error("Error uploading file!");
     }
+  }
+
+  async function wait(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   async function createSale(url) {
@@ -67,15 +105,14 @@ export default function CreateItem() {
     /* next, create the item */
     try {
       let contract = new ethers.Contract(nftaddress, NFT.abi, signer);
+      toast("Opening your wallet...");
+      await wait(1000);
       let transaction = await contract.createToken(url);
       let tx = await transaction.wait();
-      console.log("Transaction", tx);
       let event = tx.events[0];
       let value = event.args[2];
       let tokenId = value.toNumber();
-      console.log("Values", values);
       const price = ethers.utils.parseUnits(values.price, "ether");
-      console.log("Price", price.toString());
 
       /* then list the item for sale on the marketplace */
       contract = new ethers.Contract(nftmarketaddress, NFTMarket.abi, signer);
@@ -92,11 +129,11 @@ export default function CreateItem() {
         }
       );
       await transaction.wait();
-      window.scrollTo(0, 0);
-      setOpenToast(true);
+      success();
       setTimeout(() => router.push("/"), 2000);
     } catch (error) {
       console.log(error);
+      error();
     }
   }
 
@@ -115,14 +152,14 @@ export default function CreateItem() {
       <Head>
         <title>Create Asset</title>
       </Head>
-      {openToast ? (
-        <Toast
-          headerMessage={"Item created"}
-          message={"Find your product on home"}
-          setOpenToast={setOpenToast}
-          openToast={openToast}
-        />
-      ) : null}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+      />
       <main>
         <h1 className="text-center my-5 header display-4">Create Asset</h1>
         <div style={{ marginBottom: "50px" }} className="container ">
