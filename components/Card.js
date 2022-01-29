@@ -3,17 +3,20 @@ import Image from "next/image";
 export default function Card({ data, buyNft, key }) {
   return (
     <div key={key} className="mb-5 col-md-4">
-      <div style={{ borderRadius: "10px" }} className="card shadow margin-56">
+      <div style={{ borderRadius: "15px" }} className="card shadow margin-56">
         <Image
-          className="card-img-top"
+          className="card-img-top display-image-card"
           src={data.image}
           alt="Card image cap"
           width={200}
           height={250}
-          style={{ borderRadius: "10px 10px 0 0" }}
+          objectFit="cover"
         />
         <div className="card-body">
-          <h5 className="card-title" id="namepr{{i.id}}">
+          <h5
+            style={{ fontWeight: "bold", fontSize: "14pt" }}
+            id="namepr{{i.id}}"
+          >
             {data.name}
           </h5>
           <h5 className="card-title">

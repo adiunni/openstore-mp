@@ -35,7 +35,7 @@ export default function CreateItem() {
   const error = () =>
     toast.error("Error creating NFT!", {
       postition: "top-right",
-      autoClose: 3000,
+      autoClose: 2000,
       hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,
@@ -119,15 +119,13 @@ export default function CreateItem() {
       let listingPrice = await contract.getListingPrice();
       listingPrice = listingPrice.toString();
 
-      transaction = await contract.createMarketItem(
-        nftaddress,
-        tokenId,
-        price,
-        values.category,
-        {
+      transaction = await contract
+        .createMarketItem(nftaddress, tokenId, price, values.category, {
           value: listingPrice,
-        }
-      );
+        })
+        .catch((error) => {
+          error();
+        });
       await transaction.wait();
       success();
       setTimeout(() => router.push("/"), 2000);
@@ -154,7 +152,7 @@ export default function CreateItem() {
       </Head>
       <ToastContainer
         position="top-right"
-        autoClose={3000}
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -233,9 +231,10 @@ export default function CreateItem() {
                     {values.fileUrl && (
                       <Image
                         src={values.fileUrl}
-                        height="350"
                         width="350"
+                        height="250"
                         alt="Product image"
+                        objectFit="cover"
                       />
                     )}
                   </div>

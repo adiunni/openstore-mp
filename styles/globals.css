@@ -7,6 +7,10 @@
   scroll-behavior: smooth;
 }
 
+.display-image-card {
+  border-radius: 8px;
+}
+
 *::selection {
   color: black;
   background-color: #4c00ff31;
@@ -217,9 +221,9 @@ a.highlight {
   border-radius: 25px;
   color: white;
   font-size: 18px;
-  background: -webkit-linear-gradient(right, #754888, #220031);
+  background: #ff19f7;
   width: 130px;
-  transition: all 0.3s ease-in;
+  transition: all 0.2s ease-in;
   border: none;
 }
 
@@ -229,7 +233,7 @@ a.highlight {
   border-radius: 25px;
   color: white;
   font-size: 18px;
-  background: -webkit-linear-gradient(left, #1a129f, #6156f9e3);
+  background: #6156f9e3;
   width: 130px;
   border-block-style: none;
   border: none;
@@ -470,13 +474,6 @@ display ka css
 .hover-effect-zoom {
   border-radius: 50%;
 }
-/* .background-black{
-    background-color: #e7e7e7;
-} */
-
-/*
-itemview css
-*/
 
 .item-info {
   padding-top: 10%;

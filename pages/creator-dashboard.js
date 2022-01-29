@@ -14,7 +14,7 @@ export default function Home() {
       <Script src="https://kit.fontawesome.com/a076d05399.js" />
       <Head>
         <title>OpenStore • Creator dashboard</title>
-        <meta name="description" content="Blockchain based NFT application" />
+        <meta name="description" content="Your simple NFT application" />
       </Head>
       <main
         style={{ marginTop: "30px", marginBottom: "50px", minHeight: "70vh" }}
