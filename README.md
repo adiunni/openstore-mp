@@ -39,3 +39,12 @@ Polygon, IPFS, Next.js, Hardhat, Ethereum, Solidity, Metamask,HTML/CSS, BootStra
 # Update from CharieBlastX7
 
 This project has been succesfully deployed to Polygon Mumbai Testnet and website deployment might be available soon
+
+# Run the project locally
+```
+yarn install
+npx hardhat node
+npx hardhat run scripts/deploy.js --network localhost
+yarn run dev
+```
+Make sure to have metamask wallet extension in Chrome, Firefox browsers
