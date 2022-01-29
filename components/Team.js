@@ -77,7 +77,7 @@ export default function Team() {
                 width="200px"
                 height="200px"
                 className="hover-effect-zoom"
-                src="https://media-exp1.licdn.com/dms/image/C4E03AQHXARWEpmiy8g/profile-displayphoto-shrink_400_400/0/1613926731454?e=1637798400&v=beta&t=OBsbasB6Ft0q-ufUj_l9d9fX_k4FF4ZYXRrioVV6tTI"
+                src="https://media-exp1.licdn.com/dms/image/C5603AQGOmScfgKLpBw/profile-displayphoto-shrink_800_800/0/1643430344977?e=1648684800&v=beta&t=MUg8xffmEbb_h2FZL-muwkOtjVTWmZQyu7fe3ZeP1fE"
                 alt="Aditya"
                 loading="lazy"
               />
@@ -89,7 +89,7 @@ export default function Team() {
             </div>
           </div>
 
-          <div className="col-md-4 my-3 text-center">
+          {/* <div className="col-md-4 my-3 text-center">
             <div className="top-image">
               <Image
                 width="200px"
@@ -123,7 +123,7 @@ export default function Team() {
                 <b>Gabriel</b>
               </h5>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
