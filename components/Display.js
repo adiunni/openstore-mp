@@ -18,16 +18,11 @@ export default function Display() {
           <div className="col-md-6">
             <div className="box-for-names" id="hello-world">
               <h1 className="title-main">
-                <b>Open Store</b>
+                <b>NFTX</b>
               </h1>
               <h4 className="mt-2">
-                An Online Blockchain NFT Marketplace which prevents duplicate
-                assets.
+                An open source NFT marketplace (Previously known as OpenStore)
               </h4>
-              <h5 className="mt-2 text-white">
-                This is deployed on a testnet and the assets currently hold no
-                real value.
-              </h5>
               <a href="https://youtu.be/sHytyvUQB0Q" target="blank">
                 <button
                   className=" flex-row-reverse mt-3 px-5 text-center"

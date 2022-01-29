@@ -9,8 +9,11 @@ export default function Home() {
     <div>
       <Script src="https://kit.fontawesome.com/a076d05399.js" />
       <Head>
-        <title>OpenStore Marketplace</title>
-        <meta name="description" content="Your simple NFT application" />
+        <title>NFTX Marketplace</title>
+        <meta
+          name="description"
+          content="Your simple NFT application (previously known as OpenStore)"
+        />
       </Head>
       <Display />
       <TopWaveFooter />

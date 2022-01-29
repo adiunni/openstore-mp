@@ -5,8 +5,11 @@ export default function About() {
   return (
     <>
       <Head>
-        <title>OpenStore • About</title>
-        <meta name="description" content="Your simple NFT application" />
+        <title>NFTX | About</title>
+        <meta
+          name="description"
+          content="Your simple NFT application (previously known as OpenStore)"
+        />
       </Head>
       <Team />
     </>

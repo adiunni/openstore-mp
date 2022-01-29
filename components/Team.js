@@ -13,9 +13,8 @@ export default function Team() {
           <br />
           <br />
         </div>
-
         <div className="row">
-          <div className="col-md-4 my-3 text-center">
+          <div className="col-md-5 my-2 text-center">
             <div className="top-image">
               <Image
                 width="200px"
@@ -32,8 +31,7 @@ export default function Team() {
               </h5>
             </div>
           </div>
-
-          <div className="col-md-4 my-3 text-center">
+          <div className="col-md-2 my-3 text-center">
             <div className="top-image">
               <Image
                 className="hover-effect-zoom"
@@ -50,8 +48,7 @@ export default function Team() {
               </h5>
             </div>
           </div>
-
-          <div className="col-md-4 my-3 text-center">
+          <div className="col-md-5 my-3 text-center">
             <div className="top-image">
               <Image
                 width="200px"
@@ -69,9 +66,8 @@ export default function Team() {
             </div>
           </div>
         </div>
-
         <div className="row">
-          <div className="col-md-4 my-3 text-center">
+          <div className="col-md-5 my-3 text-center">
             <div className="top-image">
               <Image
                 width="200px"

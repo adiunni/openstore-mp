@@ -234,7 +234,7 @@ export default function CreateItem() {
                         width="350"
                         height="250"
                         alt="Product image"
-                        objectFit="cover"
+                        objectFit="contain"
                       />
                     )}
                   </div>

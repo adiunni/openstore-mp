@@ -8,8 +8,11 @@ export default function Home() {
     <div>
       <Script src="https://kit.fontawesome.com/a076d05399.js" />
       <Head>
-        <title>OpenStore • Your Assets</title>
-        <meta name="description" content="Your simple NFT application" />
+        <title>NFTX | Your Assets</title>
+        <meta
+          name="description"
+          content="Your simple NFT application (previously known as OpenStore)"
+        />
       </Head>
       <main
         style={{ marginTop: "30px", marginBottom: "50px", minHeight: "70vh" }}
