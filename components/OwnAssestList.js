@@ -14,6 +14,40 @@ const ItemList = () => {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  async function wait(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }
+
+  const putItemToSell = async (nft, newPrice) => {
+    const web3Modal = new Web3Modal(projAddress);
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const marketContract = new ethers.Contract(
+      nftmarketaddress,
+      NFTMarket.abi,
+      signer
+    );
+    const listingPrice = await marketContract.getListingPrice();
+    toast("Opening wallet...");
+    console.log(nft);
+    await wait(1000);
+    try {
+      const tx = await marketContract.putItemToResell(
+        nftaddress,
+        nft.itemId,
+        ethers.utils.parseUnits(newPrice, "ether"),
+        { value: listingPrice.toString() }
+      );
+      await tx.wait();
+      getItems();
+    } catch (error) {
+      toast.error("Failed to put item to sell!");
+    }
+  };
+
   useEffect(() => {
     getItems();
     setIsLoading(false);
@@ -40,12 +74,14 @@ const ItemList = () => {
           const price = ethers.utils.formatUnits(d.price.toString(), "ether");
           return {
             price,
+            itemId: d.itemId.toNumber(),
             tokenId: d.tokenId.toNumber(),
             seller: d.seller,
             owner: d.owner,
             image: meta.data.image,
             name: meta.data.name,
             description: meta.data.description,
+            creator: d.creator,
           };
         })
       );
@@ -67,7 +103,9 @@ const ItemList = () => {
     >
       <ToastContainer autoClose={3000} />
       {items.length ? (
-        items.map((item, key) => <UserCard key={key} data={item} />)
+        items.map((item, key) => (
+          <UserCard putItemToSell={putItemToSell} key={key} data={item} />
+        ))
       ) : (
         <p style={{ fontSize: "26pt" }}>You do not have any assets for now</p>
       )}

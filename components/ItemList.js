@@ -57,6 +57,7 @@ const ItemList = () => {
             image: meta.data.image,
             name: meta.data.name,
             description: meta.data.description,
+            creator: d.creator,
           };
         })
       ).catch((err) => {

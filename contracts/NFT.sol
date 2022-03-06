@@ -30,10 +30,10 @@ contract NFT is ERC721URIStorage {
         address to,
         uint256 tokenId
     ) external {
-        require(
-            ownerOf(tokenId) == msg.sender,
-            "You are not the owner of this token"
-        );
+        // require(
+        //     ownerOf(tokenId) == from,
+        //     "You are not the owner of this token"
+        // );
         _transfer(from, to, tokenId);
     }
 

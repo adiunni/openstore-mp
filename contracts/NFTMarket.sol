@@ -48,6 +48,8 @@ contract NFTMarket is ReentrancyGuard {
         bool isSold
     );
 
+    // Resale function update.
+
     event ProductUpdated(
         uint256 indexed itemId,
         uint256 indexed oldPrice,
@@ -68,9 +70,9 @@ contract NFTMarket is ReentrancyGuard {
 
     event ProductListed(uint256 indexed itemId);
 
-    // function getListingPrice() public view returns (uint256) {
-    //     return listingPrice;
-    // }
+    function getListingPrice() public view returns (uint256) {
+        return listingPrice;
+    }
 
     modifier onlyProductOrMarketplaceOwner(uint256 id) {
         if (idToMarketItem[id].owner != address(0)) {
@@ -118,8 +120,8 @@ contract NFTMarket is ReentrancyGuard {
             itemId,
             nftContract,
             tokenId,
-            payable(msg.sender),
-            payable(msg.sender),
+            payable(msg.sender), // Creator.
+            payable(msg.sender), // First seller.
             payable(address(0)), // No owner for the item
             category,
             price,
@@ -253,7 +255,7 @@ contract NFTMarket is ReentrancyGuard {
             "Price must be same as listing price"
         );
         NFT tokenContract = NFT(nftContract);
-        tokenContract.transferFrom(address(this), msg.sender, tokenId);
+        tokenContract.transferToken(msg.sender, address(this), tokenId);
         idToMarketItem[itemId].owner = payable(address(0));
         idToMarketItem[itemId].price = newPrice;
         idToMarketItem[itemId].isSold = false;
