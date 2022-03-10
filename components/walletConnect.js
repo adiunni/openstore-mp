@@ -16,7 +16,7 @@ const providerOptions = {
   portis: {
     package: Portis,
     options: {
-      id: "5f8b9b7c-d8f9-4b7b-b8f4-f8f9f8b9b7c5",
+      id: "0d3049b3-d68a-48ca-a9a7-68b31319729a",
     },
   },
   authereum: {
