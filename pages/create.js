@@ -8,6 +8,7 @@ import Script from "next/script";
 import Head from "next/head";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { initWallet } from "../components/walletConnect";
 
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
@@ -97,10 +98,7 @@ export default function CreateItem() {
   }
 
   async function createSale(url) {
-    const web3Modal = new Web3Modal(projAddress);
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
+    const signer = await initWallet();
 
     /* next, create the item */
     try {

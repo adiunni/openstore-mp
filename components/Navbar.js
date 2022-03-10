@@ -6,6 +6,7 @@ import { projAddress } from "../config";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { initWallet } from "./walletConnect";
 
 export default function Navbar() {
   const [connected, setConnected] = useState(false);
@@ -33,10 +34,7 @@ export default function Navbar() {
   }
 
   async function connectWallet() {
-    const web3Modal = new Web3Modal(projAddress);
-    toast("Connecting to wallet...");
-    await wait(1000);
-    const provider = await web3Modal.connect();
+    const signer = await initWallet();
     checkConnection();
   }
 

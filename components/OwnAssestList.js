@@ -9,6 +9,7 @@ import { ethers } from "ethers";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { initWallet } from "./walletConnect";
 
 const ItemList = () => {
   const [items, setItems] = useState([]);
@@ -21,10 +22,7 @@ const ItemList = () => {
   }
 
   const putItemToSell = async (nft, newPrice) => {
-    const web3Modal = new Web3Modal(projAddress);
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
+    const signer = await initWallet();
     const marketContract = new ethers.Contract(
       nftmarketaddress,
       NFTMarket.abi,
