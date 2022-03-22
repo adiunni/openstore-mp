@@ -5,7 +5,7 @@ export default function Footer() {
     <div className="footer_bottom">
       <div className="container">
         <div className="row">
-          <div className="col-md-5 footer_about_section">
+          <div className="col-lg-6 footer_about_section">
             <h3>
               <b>About OpenStore</b>
             </h3>
@@ -18,7 +18,7 @@ export default function Footer() {
               </button>
             </a>
           </div>
-          <div className="col-md-3 footer_quicklinks_section">
+          <div className="col-md-4 footer_quicklinks_section">
             <h3>
               <b>Quick Links</b>
             </h3>
@@ -30,20 +30,6 @@ export default function Footer() {
                 <Link href="/about">About Us</Link>
               </li>
             </ul>
-          </div>
-          <div className="col-md-4 footer_contact_section">
-            <h3>
-              <b>Contact Us</b>
-            </h3>
-            <ul className="footer-links">
-              <li>
-                <a href="mailto:adiunni@hotmail.com?subject =Contact you regarding OpenStore = Message">
-                  <i className="fa fa-2x fa-envelope" aria-hidden="true"></i>{" "}
-                  droptableteam@gmail.com
-                </a>
-              </li>
-            </ul>
-            <br />
           </div>
         </div>
       </div>

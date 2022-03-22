@@ -8,7 +8,7 @@ import Script from "next/script";
 import Head from "next/head";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { initWallet } from "../components/walletConnect";
+import { connectWallet, initWallet } from "../components/walletConnect";
 
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
@@ -98,8 +98,8 @@ export default function CreateItem() {
   }
 
   async function createSale(url) {
-    const signer = await initWallet();
-
+    const provider = await connectWallet();
+    const signer = provider.getSigner();
     /* next, create the item */
     try {
       let contract = new ethers.Contract(nftaddress, NFT.abi, signer);
@@ -230,9 +230,9 @@ export default function CreateItem() {
                       <Image
                         src={values.fileUrl}
                         width="350"
-                        height="250"
+                        height="300"
                         alt="Product image"
-                        objectFit="cover"
+                        objectFit="contain"
                       />
                     )}
                   </div>

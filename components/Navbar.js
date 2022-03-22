@@ -81,7 +81,7 @@ export default function Navbar() {
                   href="/viewassets"
                   className="nav-link left"
                 >
-                  <a className={"nav-link left"}>View your assets</a>
+                  <a className={"nav-link left"}>Your purchases</a>
                 </Link>
               </li>
             )}

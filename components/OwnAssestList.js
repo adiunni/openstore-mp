@@ -9,7 +9,7 @@ import { ethers } from "ethers";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { initWallet } from "./walletConnect";
+import { connectWallet } from "./walletConnect";
 
 const ItemList = () => {
   const [items, setItems] = useState([]);
@@ -22,7 +22,10 @@ const ItemList = () => {
   }
 
   const putItemToSell = async (nft, newPrice) => {
-    const signer = await initWallet();
+    // const signer = await initWallet();
+
+    const provider = await connectWallet();
+    const signer = provider.getSigner();
     const marketContract = new ethers.Contract(
       nftmarketaddress,
       NFTMarket.abi,
@@ -102,7 +105,12 @@ const ItemList = () => {
       <ToastContainer autoClose={3000} />
       {items.length ? (
         items.map((item, key) => (
-          <UserCard putItemToSell={putItemToSell} key={key} data={item} />
+          <UserCard
+            isCreatorDashboard={false}
+            putItemToSell={putItemToSell}
+            key={key}
+            data={item}
+          />
         ))
       ) : (
         <p style={{ fontSize: "26pt" }}>You do not have any assets for now</p>

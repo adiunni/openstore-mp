@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
-export default function Card({ data, key, putItemToSell }) {
+export default function Card({ data, key, putItemToSell, isCreatorDashboard }) {
   const [input, setInput] = useState(0);
   const [enable, setEnable] = useState(false);
   useEffect(() => {
@@ -34,31 +34,35 @@ export default function Card({ data, key, putItemToSell }) {
           <h5 className="card-title">
             {data.price} <b>ETH</b>
           </h5>
-          <div className="row m-1">
-            <label htmlFor="resaleinput">Enter the Resale Value</label>
-          </div>
-          <div className="row">
-            <div className="col-6">
-              <input
-                id="resaleinput"
-                onChange={handleChange}
-                value={input}
-                placeholder="Enter resale price"
-                type="number"
-              />
-            </div>
-            <div className="col-6">
-              {enable && (
-                <button
-                  onClick={() => putItemToSell(data, input)}
-                  id="qv{{i.id}}"
-                  className="commonbuttons"
-                >
-                  Sell
-                </button>
-              )}
-            </div>
-          </div>
+          {!isCreatorDashboard ? (
+            <>
+              <div className="row m-1">
+                <label htmlFor="resaleinput">Enter the Resale Value</label>
+              </div>
+              <div className="row">
+                <div className="col-6">
+                  <input
+                    id="resaleinput"
+                    onChange={handleChange}
+                    value={input}
+                    placeholder="Enter resale price"
+                    type="number"
+                  />
+                </div>
+                <div className="col-6">
+                  {enable && (
+                    <button
+                      onClick={() => putItemToSell(data, input)}
+                      id="qv{{i.id}}"
+                      className="commonbuttons"
+                    >
+                      Sell
+                    </button>
+                  )}
+                </div>
+              </div>
+            </>
+          ) : null}
           <br />
           <p className="card-text">{data.desc}</p>
         </div>
