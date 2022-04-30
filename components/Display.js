@@ -18,7 +18,7 @@ export default function Display() {
           <div className="col-md-6">
             <div className="box-for-names" id="hello-world">
               <h1 className="title-main">
-                <b>NFTX</b>
+                <b>NEFTX</b>
               </h1>
               <h4 className="mt-2">
                 Previously known as <b>OpenStore</b>

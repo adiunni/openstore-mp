@@ -19,6 +19,9 @@ export default function Card({ data, buyNft, key }) {
           >
             {data.name}
           </h5>
+          <h5 style={{ fontWeight: "bold", fontSize: "14pt" }}>
+            Creator: {data.creator.toString().slice(0, 15)}...
+          </h5>
           <h5 className="card-title">
             {data.price} <b>ETH</b>
           </h5>
