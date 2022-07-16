@@ -41,9 +41,9 @@ Open Store is a NFT marketplace where traders can buy and sell NFT tokens throug
 * Hardhat (Contract compiler and local blockchain provider)
 * OpenZeppelin (To import the ERC721 token)
 
-# Update from CharieBlastX7
+# Project update
 
-This project has been succesfully deployed to Polygon Mumbai Testnet and website deployment might be available soon
+This repo contains additional features like re-listing owned NFTs back to the market and additional wallet support (under development)
 
 # Run the project locally
 ```
