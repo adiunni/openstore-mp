@@ -39,3 +39,4 @@ yarn-error.log*
 /artifacts
 /cache
 config.js
+.env

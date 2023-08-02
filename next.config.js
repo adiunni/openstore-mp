@@ -6,6 +6,7 @@ module.exports = {
       "avatars.githubusercontent.com",
       "media-exp1.licdn.com",
       "ipfs.infura.io",
+      "adiunni.infura-ipfs.io",
     ],
   },
 };

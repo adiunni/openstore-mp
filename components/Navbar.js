@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import Web3Modal from "web3modal";
 import Web3 from "web3";
-import { projAddress } from "../config";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

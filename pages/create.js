@@ -3,18 +3,26 @@ import { ethers } from "ethers";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import Web3Modal from "web3modal";
 import Script from "next/script";
 import Head from "next/head";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { connectWallet, initWallet } from "../components/walletConnect";
-
-const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
-
-import { nftaddress, nftmarketaddress, projAddress } from "../config";
+import { connectWallet } from "../components/walletConnect";
 import NFT from "../artifacts/contracts/NFT.sol/NFT.json";
 import NFTMarket from "../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
+
+const projectId = "2TPxs6tRNDjxRYUke9PoCsaPlGV";
+const projectSecret = "2dff8ff899d9b860e876b142e1963f88";
+const auth =
+  "Basic " + Buffer.from(projectId + ":" + projectSecret).toString("base64");
+const client = ipfsHttpClient({
+  host: "ipfs.infura.io",
+  port: 5001,
+  protocol: "https",
+  headers: {
+    authorization: auth,
+  },
+});
 
 export default function CreateItem() {
   const [values, setValues] = useState({
@@ -33,6 +41,7 @@ export default function CreateItem() {
       closeOnClick: true,
       pauseOnHover: true,
     });
+
   const error = () =>
     toast.error("Error creating NFT!", {
       postition: "top-right",
@@ -41,19 +50,23 @@ export default function CreateItem() {
       closeOnClick: true,
       pauseOnHover: true,
     });
+
   async function onChange(e) {
     const file = e.target.files[0];
     try {
       const added = await client.add(file, {
         progress: (prog) => console.log(`received: ${prog}`),
       });
-      const fileUrl = `https://ipfs.infura.io/ipfs/${added.path}`;
+      const fileUrl = `https://adiunni.infura-ipfs.io/ipfs/${added.path}`;
+      console.log("File URL: ", fileUrl);
       setValues({ ...values, fileUrl });
       toast.success("File uploaded to IPFS!");
     } catch (error) {
       console.log("Error uploading file: ", error);
+      error();
     }
   }
+
   async function createMarket() {
     const { name, description, price, fileUrl, category } = values;
     if (!name) {
@@ -84,7 +97,7 @@ export default function CreateItem() {
     });
     try {
       const added = await client.add(data);
-      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      const url = `https://adiunni.infura-ipfs.io/ipfs/${added.path}`;
       /* after file is uploaded to IPFS, pass the URL to save it on Polygon */
       createSale(url);
     } catch (error) {
@@ -102,25 +115,41 @@ export default function CreateItem() {
     const signer = provider.getSigner();
     /* next, create the item */
     try {
-      let contract = new ethers.Contract(nftaddress, NFT.abi, signer);
+      let contract = new ethers.Contract(
+        process.env.NEXT_PUBLIC_NFT_ADDRESS,
+        NFT.abi,
+        signer
+      );
       toast("Opening your wallet...");
       await wait(1000);
       let transaction = await contract.createToken(url);
       let tx = await transaction.wait();
+      console.log("Transaction: ", tx);
       let event = tx.events[0];
+      console.log("Event: ", event);
       let value = event.args[2];
       let tokenId = value.toNumber();
       const price = ethers.utils.parseUnits(values.price, "ether");
 
       /* then list the item for sale on the marketplace */
-      contract = new ethers.Contract(nftmarketaddress, NFTMarket.abi, signer);
+      contract = new ethers.Contract(
+        process.env.NEXT_PUBLIC_NFT_MARKET_ADDRESS,
+        NFTMarket.abi,
+        signer
+      );
       let listingPrice = await contract.getListingPrice();
       listingPrice = listingPrice.toString();
 
       transaction = await contract
-        .createMarketItem(nftaddress, tokenId, price, values.category, {
-          value: listingPrice,
-        })
+        .createMarketItem(
+          process.env.NEXT_PUBLIC_NFT_ADDRESS,
+          tokenId,
+          price,
+          values.category,
+          {
+            value: listingPrice,
+          }
+        )
         .catch((error) => {
           error();
         });
@@ -129,7 +158,6 @@ export default function CreateItem() {
       setTimeout(() => router.push("/"), 2000);
     } catch (error) {
       console.log(error);
-      error();
     }
   }
 

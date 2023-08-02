@@ -1,6 +1,5 @@
 import React from "react";
 import Web3Modal from "web3modal";
-import { nftaddress, nftmarketaddress, projAddress } from "../config";
 import UserCard from "./UserCard";
 import NFT from "../artifacts/contracts/NFT.sol/NFT.json";
 import NFTMarket from "../artifacts/contracts/NFTMarket.sol/NFTMarket.json";
@@ -27,7 +26,7 @@ const ItemList = () => {
     const provider = await connectWallet();
     const signer = provider.getSigner();
     const marketContract = new ethers.Contract(
-      nftmarketaddress,
+      process.env.NEXT_PUBLIC_NFT_MARKET_ADDRESS,
       NFTMarket.abi,
       signer
     );
@@ -37,7 +36,7 @@ const ItemList = () => {
     await wait(1000);
     try {
       const tx = await marketContract.putItemToResell(
-        nftaddress,
+        process.env.NEXT_PUBLIC_NFT_ADDRESS,
         nft.itemId,
         ethers.utils.parseUnits(newPrice, "ether"),
         { value: listingPrice.toString() }
@@ -56,16 +55,20 @@ const ItemList = () => {
 
   const getItems = async () => {
     try {
-      const web3Modal = new Web3Modal(projAddress);
+      const web3Modal = new Web3Modal(process.env.NEXT_PUBLIC_PROJECT_ADDRESS);
       const connection = await web3Modal.connect();
       const provider = new ethers.providers.Web3Provider(connection);
       const signer = provider.getSigner();
       const marketContract = new ethers.Contract(
-        nftmarketaddress,
+        process.env.NEXT_PUBLIC_NFT_MARKET_ADDRESS,
         NFTMarket.abi,
         signer
       );
-      const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider);
+      const tokenContract = new ethers.Contract(
+        process.env.NEXT_PUBLIC_NFT_ADDRESS,
+        NFT.abi,
+        provider
+      );
       const data = await marketContract.fetchPurchasedNFTs();
 
       let newItems = await Promise.all(

@@ -2,7 +2,6 @@ import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import Portis from "@portis/web3";
 import Authereum from "authereum";
-import { projAddress } from "../config";
 import { ethers } from "ethers";
 
 const providerOptions = {
@@ -35,7 +34,7 @@ export async function initWallet() {
 }
 
 export async function connectWallet() {
-  const web3Modal = new Web3Modal(projAddress);
+  const web3Modal = new Web3Modal(process.env.NEXT_PUBLIC_PROJECT_ADDRESS);
   const connection = await web3Modal.connect();
   const provider = new ethers.providers.Web3Provider(connection);
   return provider;

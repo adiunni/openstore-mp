@@ -1,8 +1,6 @@
 require("@nomiclabs/hardhat-waffle");
-const fs = require("fs");
-const privateKey =
-  fs.readFileSync(".secret").toString().trim() || "01234567890123456789";
-const infuraId = fs.readFileSync(".infuraid").toString().trim() || "";
+const privateKey = process.env.NEXT_PUBLIC_PRIVATE_KEY || "";
+const infuraId = process.env.NEXT_PUBLIC_INFURA_ID || "";
 
 module.exports = {
   defaultNetwork: "hardhat",
@@ -13,6 +11,11 @@ module.exports = {
     mumbai: {
       // Infura
       url: `https://polygon-mumbai.infura.io/v3/${infuraId}`,
+      accounts: [privateKey],
+    },
+    sepolia: {
+      // Infura
+      url: `https://sepolia.infura.io/v3/${infuraId}`,
       accounts: [privateKey],
     },
   },
