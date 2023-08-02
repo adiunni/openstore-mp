@@ -1,5 +1,5 @@
 require("@nomiclabs/hardhat-waffle");
-const privateKey = process.env.NEXT_PUBLIC_PRIVATE_KEY || "";
+const privateKey = process.env.NEXT_PUBLIC_SECRET || "";
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID || "";
 
 module.exports = {
